@@ -33,12 +33,15 @@ public class PersonServiceImplTest {
 
     @BeforeAll
     public static void setUp(@Value("${micro.service.one.api.url.port}") int port) throws IOException {
+        // Create a MockWebServer. These are lean enough that you can create a new
+        // instance for every unit test.
         mockWebServer = new MockWebServer();
         mockWebServer.start(port);
     }
 
     @AfterAll
     static void tearDown() throws IOException {
+        // Shut down the server. Instances cannot be reused.
         mockWebServer.shutdown();
     }
 
@@ -47,16 +50,20 @@ public class PersonServiceImplTest {
 
         Person mockPerson = new Person(100, "Adam", "Sandler");
 
+        // Schedule some responses.
         mockWebServer.enqueue(new MockResponse()
                 .setBody(objectMapper.writeValueAsString(mockPerson))
                 .addHeader("Content-Type", "application/json; charset=utf-8"));
 
+        // Exercise your application code, which should make those HTTP requests.
+        // Responses are returned in the same order that they are enqueued.
         Mono<Person> response = Mono.just(personService.sentPersonToServiceOne(mockPerson));
 
         StepVerifier.create(response)
                 .expectNextMatches(resp -> resp.getLastName().equals(mockPerson.getLastName()))
                 .verifyComplete();
 
+        // Optional: confirm that your app made the HTTP requests you were expecting.
         RecordedRequest recordedRequest = mockWebServer.takeRequest();
 
         assertEquals("POST", recordedRequest.getMethod());
