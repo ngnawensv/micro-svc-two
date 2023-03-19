@@ -24,7 +24,7 @@ import static org.junit.Assert.assertEquals;
 public class PersonServiceImplTest {
     @Autowired
     private PersonService personService;
-    public static MockWebServer mockBackEnd;
+    public static MockWebServer  mockWebServer;
 
     @Value("${micro.service.one.api.url.base}")
     private String baseUrl;
@@ -33,13 +33,13 @@ public class PersonServiceImplTest {
 
     @BeforeAll
     public static void setUp(@Value("${micro.service.one.api.url.port}") int port) throws IOException {
-        mockBackEnd = new MockWebServer();
-        mockBackEnd.start(port);
+        mockWebServer = new MockWebServer();
+        mockWebServer.start(port);
     }
 
     @AfterAll
     static void tearDown() throws IOException {
-        mockBackEnd.shutdown();
+        mockWebServer.shutdown();
     }
 
     @Test
@@ -47,7 +47,7 @@ public class PersonServiceImplTest {
 
         Person mockPerson = new Person(100, "Adam", "Sandler");
 
-        mockBackEnd.enqueue(new MockResponse()
+        mockWebServer.enqueue(new MockResponse()
                 .setBody(objectMapper.writeValueAsString(mockPerson))
                 .addHeader("Content-Type", "application/json; charset=utf-8"));
 
@@ -57,7 +57,7 @@ public class PersonServiceImplTest {
                 .expectNextMatches(resp -> resp.getLastName().equals(mockPerson.getLastName()))
                 .verifyComplete();
 
-        RecordedRequest recordedRequest = mockBackEnd.takeRequest();
+        RecordedRequest recordedRequest = mockWebServer.takeRequest();
 
         assertEquals("POST", recordedRequest.getMethod());
         assertEquals("/person", recordedRequest.getPath());
