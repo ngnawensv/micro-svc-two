@@ -1,0 +1,10 @@
+micro:
+  service:
+    one:
+      api:
+        url:
+          base: ${SERVICE_ONE:http://localhost}:${micro.service.one.api.url.port}
+          port: 8081
+
+server:
+  port: 8080
