@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.test.context.ActiveProfiles;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -20,6 +20,7 @@ import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 
 @SpringBootTest
+@ActiveProfiles("test")
 public class PersonServiceImplTest {
     @Autowired
     private PersonService personService;
