@@ -34,7 +34,7 @@ public class PersonControllerTest {
     private PersonService personService;
 
     @Test
-    public void SendPerson_Person_thenReturnOkStatus() throws Exception {
+    public void SendPerson_Person_thenReturnIs2xxSuccessful() throws Exception {
 
         Person mockPerson = new Person(100, "Adam", "Sandler");
 
@@ -48,4 +48,36 @@ public class PersonControllerTest {
                 .exchange()
                 .expectStatus().is2xxSuccessful();
     }
+
+    @Test
+    public void SendPerson_Person_thenReturnIs4xxClientError() throws Exception {
+
+        Person mockPerson = new Person(100, "Adam", "Sandler");
+
+        when(personService.sentPersonToServiceOne(mockPerson)).thenReturn(mockPerson);
+
+        webTestClient.post()
+                .uri("/perso")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(Mono.just(mockPerson),Person.class)
+                .exchange()
+                .expectStatus().is4xxClientError();
+    }
+
+    /*@Test
+    public void SendPerson_Person_thenReturnIs5xxServerError() throws Exception {
+
+        Person mockPerson = new Person(100, "Adam", "Sandler");
+
+        when(personService.sentPersonToServiceOne(mockPerson)).thenReturn(mockPerson);
+
+        webTestClient.post()
+                .uri("/person")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(Mono.just(mockPerson),Person.class)
+                .exchange()
+                .expectStatus().is5xxServerError();
+    }*/
 }

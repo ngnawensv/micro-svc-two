@@ -1,9 +1,6 @@
 package com.belrose.microsvctwo.pojo;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -13,6 +10,7 @@ import java.io.Serializable;
 @Builder
 public class Person implements Serializable {
     private long id;
+    @NonNull
     private String lastName;
     private String firstName;
 }
