@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 //follow this link https://blog.knoldus.com/spring-webflux-how-to-test-your-controllers-using-webtestclient/
@@ -65,12 +66,12 @@ public class PersonControllerTest {
                 .expectStatus().is4xxClientError();
     }
 
-    /*@Test
+    @Test
     public void SendPerson_Person_thenReturnIs5xxServerError() throws Exception {
 
         Person mockPerson = new Person(100, "Adam", "Sandler");
 
-        when(personService.sentPersonToServiceOne(mockPerson)).thenReturn(mockPerson);
+        doThrow(new Exception()).when(personService).sentPersonToServiceOne(mockPerson);
 
         webTestClient.post()
                 .uri("/person")
@@ -79,5 +80,5 @@ public class PersonControllerTest {
                 .body(Mono.just(mockPerson),Person.class)
                 .exchange()
                 .expectStatus().is5xxServerError();
-    }*/
+    }
 }

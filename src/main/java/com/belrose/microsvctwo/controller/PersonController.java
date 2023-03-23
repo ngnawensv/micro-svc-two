@@ -3,14 +3,11 @@ package com.belrose.microsvctwo.controller;
 import com.belrose.microsvctwo.pojo.Person;
 import com.belrose.microsvctwo.service.PersonService;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Mono;
 
 @RestController
 @Slf4j
@@ -23,13 +20,11 @@ public class PersonController {
     }
 
     @PostMapping(path = "/person",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Person SendPerson(@Validated @RequestBody Person person){
+    public Person sendPerson(@Validated @RequestBody Person person) throws Exception {
         try{
-            Person response = personService.sentPersonToServiceOne(person);
-            return response;
+            return personService.sentPersonToServiceOne(person);
         }catch (Exception ex){
-            ex.getStackTrace();
-            return null;
+            throw  new Exception(ex);
         }
 
     }
