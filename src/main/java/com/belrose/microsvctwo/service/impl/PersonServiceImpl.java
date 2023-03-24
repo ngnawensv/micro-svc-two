@@ -20,16 +20,15 @@ public class PersonServiceImpl implements PersonService {
     private static final String PATH="/person";
 
     @Override
-    public Person sentPersonToServiceOne(Person person) throws Exception {
+    public Mono<Person>  sentPersonToServiceOne(Person person) throws Exception {
         try{
-            Person response = micoServiceOneWebClient
+            Mono<Person> response = micoServiceOneWebClient
                 .post()
                 .uri(uriBuilder -> uriBuilder.path(PATH).build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(person))
                 .retrieve()
-                .bodyToMono(Person.class)
-                .block();
+                .bodyToMono(Person.class);
 
             System.out.println("Data send.............");
         return response;

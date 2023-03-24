@@ -37,15 +37,16 @@ public class PersonControllerTest {
     @Test
     public void SendPerson_Person_thenReturnIs2xxSuccessful() throws Exception {
 
-        Person mockPerson = new Person(100, "Adam", "Sandler");
+        Person  personMock = new Person(100, "Adam", "Sandler");
+        Mono<Person>  personMono = Mono.just(personMock);
 
-        when(personService.sentPersonToServiceOne(mockPerson)).thenReturn(mockPerson);
+        when(personService.sentPersonToServiceOne(personMock)).thenReturn(personMono);
 
         webTestClient.post()
                 .uri("/person")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .body(Mono.just(mockPerson),Person.class)
+                .body(personMono,Person.class)
                 .exchange()
                 .expectStatus().is2xxSuccessful();
     }
@@ -53,15 +54,16 @@ public class PersonControllerTest {
     @Test
     public void SendPerson_Person_thenReturnIs4xxClientError() throws Exception {
 
-        Person mockPerson = new Person(100, "Adam", "Sandler");
+        Person  personMock = new Person(100, "Adam", "Sandler");
+        Mono<Person>  personMono = Mono.just(personMock);
 
-        when(personService.sentPersonToServiceOne(mockPerson)).thenReturn(mockPerson);
+        when(personService.sentPersonToServiceOne(personMock)).thenReturn(personMono);
 
         webTestClient.post()
                 .uri("/perso")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .body(Mono.just(mockPerson),Person.class)
+                .body(personMono,Person.class)
                 .exchange()
                 .expectStatus().is4xxClientError();
     }
@@ -69,15 +71,16 @@ public class PersonControllerTest {
     @Test
     public void SendPerson_Person_thenReturnIs5xxServerError() throws Exception {
 
-        Person mockPerson = new Person(100, "Adam", "Sandler");
+        Person  personMock = new Person(100, "Adam", "Sandler");
+        Mono<Person>  personMono = Mono.just(personMock);
 
-        doThrow(new Exception()).when(personService).sentPersonToServiceOne(mockPerson);
+        doThrow(new Exception()).when(personService).sentPersonToServiceOne(personMock);
 
         webTestClient.post()
                 .uri("/person")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .body(Mono.just(mockPerson),Person.class)
+                .body(personMono,Person.class)
                 .exchange()
                 .expectStatus().is5xxServerError();
     }

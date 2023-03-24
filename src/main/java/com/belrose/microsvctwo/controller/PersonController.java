@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 @RestController
 @Slf4j
@@ -20,7 +21,7 @@ public class PersonController {
     }
 
     @PostMapping(path = "/person",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Person sendPerson(@Validated @RequestBody Person person) throws Exception {
+    public Mono<Person> sendPerson(@Validated @RequestBody Person person) throws Exception {
         try{
             return personService.sentPersonToServiceOne(person);
         }catch (Exception ex){

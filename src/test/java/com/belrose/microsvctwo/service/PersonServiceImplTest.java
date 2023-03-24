@@ -46,7 +46,7 @@ public class PersonServiceImplTest {
     }
 
     @Test
-    public void sentPersonToServiceOne() throws Exception {
+     void sentPersonToServiceOne() throws Exception {
 
         Person mockPerson = new Person(100, "Adam", "Sandler");
 
@@ -57,7 +57,7 @@ public class PersonServiceImplTest {
 
         // Exercise your application code, which should make those HTTP requests.
         // Responses are returned in the same order that they are enqueued.
-        Mono<Person> response = Mono.just(personService.sentPersonToServiceOne(mockPerson));
+        Mono<Person> response = personService.sentPersonToServiceOne(mockPerson);
 
         StepVerifier.create(response)
                 .expectNextMatches(resp -> resp.getLastName().equals(mockPerson.getLastName()))
