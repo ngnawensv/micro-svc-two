@@ -1,9 +1,9 @@
 package com.belrose.microsvctwo.service.impl;
 
-import com.belrose.microsvctwo.pojo.Person;
+import com.belrose.microsvctwo.model.Person;
+import com.belrose.microsvctwo.repository.PersonRepository;
 import com.belrose.microsvctwo.service.PersonService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -14,26 +14,36 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Service
 public class PersonServiceImpl implements PersonService {
-    @Autowired
-    @Qualifier("micoServiceOneWebClient")
-    private WebClient micoServiceOneWebClient;
-    private static final String PATH="/person";
 
-    @Override
-    public Mono<Person>  sentPersonToServiceOne(Person person) throws Exception {
-        try{
-            Mono<Person> response = micoServiceOneWebClient
-                .post()
-                .uri(uriBuilder -> uriBuilder.path(PATH).build())
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(person))
-                .retrieve()
-                .bodyToMono(Person.class);
+  private WebClient micoServiceOneWebClient;
+  private PersonRepository personRepository;
+  private static final String URL_PERSON = "/person";
 
-            System.out.println("Data send.............");
-        return response;
-        }catch (Exception ex){
-            throw new Exception("Error  to send data..............",ex);
-        }
-    }
+  public PersonServiceImpl(@Qualifier("micoServiceOneWebClient") WebClient micoServiceOneWebClient,PersonRepository personRepository){
+    this.micoServiceOneWebClient=micoServiceOneWebClient;
+    this.personRepository=personRepository;
+  }
+  @Override
+  public Mono<Person> sentPersonToServiceOne(Person person) throws Exception {
+    Mono<Person> response = micoServiceOneWebClient
+        .post()
+        .uri(uriBuilder -> uriBuilder.path(URL_PERSON).build())
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(BodyInserters.fromValue(person))
+        .retrieve()
+        .bodyToMono(Person.class);
+    log.info("Data send.............");
+    return response;
+  }
+
+  @Override
+  public Mono<Person> savePerson(Person person) throws Exception {
+
+    Mono<Person> personMono =  personRepository.save(person);
+
+    return  sentPersonToServiceOne(personMono.block());
+
+  }
+
+
 }

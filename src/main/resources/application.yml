@@ -5,6 +5,12 @@ micro:
         url:
           base: ${SERVICE_ONE:http://localhost}:${micro.service.one.api.url.port}
           port: 8081
+spring:
+  data:
+    mongodb:
+      database: humans
+      host: localhost
+      port: 27017
 
 server:
   port: 8080

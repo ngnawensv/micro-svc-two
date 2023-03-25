@@ -1,4 +1,4 @@
-package com.belrose.microsvctwo.appConfig;
+package com.belrose.microsvctwo.appconfig;
 
 
 import org.springframework.beans.factory.annotation.Qualifier;

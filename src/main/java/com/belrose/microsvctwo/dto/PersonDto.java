@@ -1,4 +1,4 @@
-package com.belrose.microsvctwo.pojo;
+package com.belrose.microsvctwo.dto;
 
 import lombok.*;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Person implements Serializable {
+public class PersonDto implements Serializable {
     private long id;
     @NonNull
     private String lastName;

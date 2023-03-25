@@ -1,6 +1,6 @@
 package com.belrose.microsvctwo.service;
 
-import com.belrose.microsvctwo.pojo.Person;
+import com.belrose.microsvctwo.model.Person;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;

@@ -1,7 +1,7 @@
 package com.belrose.microsvctwo.controller;
 
 
-import com.belrose.microsvctwo.pojo.Person;
+import com.belrose.microsvctwo.model.Person;
 import com.belrose.microsvctwo.service.PersonService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +37,7 @@ public class PersonControllerTest {
     @Test
     public void SendPerson_Person_thenReturnIs2xxSuccessful() throws Exception {
 
-        Person  personMock = new Person(100, "Adam", "Sandler");
+        Person personMock = new Person(100, "Adam", "Sandler");
         Mono<Person>  personMono = Mono.just(personMock);
 
         when(personService.sentPersonToServiceOne(personMock)).thenReturn(personMono);
@@ -46,7 +46,7 @@ public class PersonControllerTest {
                 .uri("/person")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .body(personMono,Person.class)
+                .body(personMono, Person.class)
                 .exchange()
                 .expectStatus().is2xxSuccessful();
     }
@@ -54,7 +54,7 @@ public class PersonControllerTest {
     @Test
     public void SendPerson_Person_thenReturnIs4xxClientError() throws Exception {
 
-        Person  personMock = new Person(100, "Adam", "Sandler");
+        Person personMock = new Person(100, "Adam", "Sandler");
         Mono<Person>  personMono = Mono.just(personMock);
 
         when(personService.sentPersonToServiceOne(personMock)).thenReturn(personMono);
@@ -63,7 +63,7 @@ public class PersonControllerTest {
                 .uri("/perso")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .body(personMono,Person.class)
+                .body(personMono, Person.class)
                 .exchange()
                 .expectStatus().is4xxClientError();
     }
@@ -71,7 +71,7 @@ public class PersonControllerTest {
     @Test
     public void SendPerson_Person_thenReturnIs5xxServerError() throws Exception {
 
-        Person  personMock = new Person(100, "Adam", "Sandler");
+        Person personMock = new Person(100, "Adam", "Sandler");
         Mono<Person>  personMono = Mono.just(personMock);
 
         doThrow(new Exception()).when(personService).sentPersonToServiceOne(personMock);
@@ -80,7 +80,7 @@ public class PersonControllerTest {
                 .uri("/person")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .body(personMono,Person.class)
+                .body(personMono, Person.class)
                 .exchange()
                 .expectStatus().is5xxServerError();
     }
