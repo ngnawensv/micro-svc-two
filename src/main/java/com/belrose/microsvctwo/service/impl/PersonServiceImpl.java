@@ -1,5 +1,6 @@
 package com.belrose.microsvctwo.service.impl;
 
+import com.belrose.microsvctwo.exception.PersonNotFoundException;
 import com.belrose.microsvctwo.model.Person;
 import com.belrose.microsvctwo.repository.PersonRepository;
 import com.belrose.microsvctwo.service.PersonService;
@@ -9,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -24,7 +26,7 @@ public class PersonServiceImpl implements PersonService {
     this.personRepository=personRepository;
   }
   @Override
-  public Mono<Person> sentPersonToServiceOne(Person person) throws Exception {
+  public Mono<Person> sentPersonToServiceOne(Person person) throws PersonNotFoundException {
     Mono<Person> response = micoServiceOneWebClient
         .post()
         .uri(uriBuilder -> uriBuilder.path(URL_PERSON).build())
@@ -37,13 +39,19 @@ public class PersonServiceImpl implements PersonService {
   }
 
   @Override
-  public Mono<Person> savePerson(Person person) throws Exception {
-
-    Mono<Person> personMono =  personRepository.save(person);
-
+  public Mono<Person> savePerson(Person person) throws PersonNotFoundException {
+    Mono<Person> personMono= personRepository.save(person);
     return  sentPersonToServiceOne(personMono.block());
-
   }
 
+  @Override
+  public Mono<Person> getPerson(long id) throws PersonNotFoundException {
+    return personRepository.findById(id);
+  }
+
+  @Override
+  public Flux<Person> getAllPerson() throws PersonNotFoundException {
+    return personRepository.findAll();
+  }
 
 }
